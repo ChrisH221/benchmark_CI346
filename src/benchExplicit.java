@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Chris on 10/12/2015.
@@ -24,10 +23,11 @@ class benchExplicit implements Runnable {
 
         this.arr = arr;
         int  section = arr.size() / 4;
-        arr1 = this.arr.subList(0, section-1);
-        arr2 = this.arr.subList(section,section*2-1);
-        arr3 = this.arr.subList(section*2,section*3-1);
-        arr4 = this.arr.subList(section*3,section*4-1);
+
+        arr1 = this.arr.subList(0, section);
+        arr2 = this.arr.subList(section,section*2);
+        arr3 = this.arr.subList(section*2,section*3);
+        arr4 = this.arr.subList(section*3,section*4);
 
     }
 
@@ -73,7 +73,7 @@ class benchExplicit implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+
         Thread thread2 = new Thread(new Runnable(){
 
             @Override
@@ -85,6 +85,7 @@ class benchExplicit implements Runnable {
         });
         thread2.start();
         try {
+            thread1.join();
 			thread2.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -101,6 +102,7 @@ class benchExplicit implements Runnable {
         });
         thread3.start();
         try {
+            thread2.join();
 			thread3.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -117,24 +119,25 @@ class benchExplicit implements Runnable {
         });
         thread4.start();
         try {
+            thread1.join();
+            thread2.join();
+            thread3.join();
 			thread4.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        List<Integer> temp = null;
+        List<Integer> temp = new ArrayList<Integer>();
         temp.addAll(arr1);
         temp.addAll(arr2);
         temp.addAll(arr3);
         temp.addAll(arr4);
         
         arr = (ArrayList<Integer>) sort(temp);
-       
-        for(int x =0; x < arr.size(); x++)System.out.println(arr.get(x));
-        
+
         long finish = System.nanoTime();
        
-
+        result = finish - start;
 
 
     }

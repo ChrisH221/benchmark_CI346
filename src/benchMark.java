@@ -14,6 +14,7 @@ public class benchMark {
     ArrayList<Integer> arr1 = new ArrayList<>();
 	 ArrayList<Integer> arr2 = new ArrayList<>();
 	 ArrayList<Integer> arr3 = new ArrayList<>();
+    ArrayList<Integer> arr4 = new ArrayList<>();
 
     public benchMark(){
 
@@ -40,9 +41,14 @@ public class benchMark {
     	for(Integer i : arr) {
     	    arr3.add(i);
     	}
-    	
-    	 
-    	 
+
+        for(Integer i : arr) {
+            arr4.add(i);
+        }
+
+
+
+
     }
     
     public void runBench(){
@@ -52,8 +58,10 @@ public class benchMark {
         System.out.println("benchForLoop test time = " + bfl.test1());
         benchExplicit bex = new benchExplicit(arr2);
         bex.run();
+        benchThreadPool btp = new benchThreadPool(arr3);
+        System.out.println(btp.test());
         System.out.println("benchExplicit test time = " + bex.result);
-        benchImplicit bIm = new benchImplicit(arr3);
+        benchImplicit bIm = new benchImplicit(arr4);
         System.out.println("benchImplicit test time = " + bIm.test1());
 
     	
