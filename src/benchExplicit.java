@@ -12,7 +12,7 @@ class benchExplicit implements Runnable {
 
 
     ArrayList<Integer> arr;
-    List<Integer> arr1;
+    List<Integer> arr1 = new ArrayList<Integer>();
     List<Integer> arr2;
     List<Integer> arr3;
     List<Integer> arr4;
@@ -29,6 +29,7 @@ class benchExplicit implements Runnable {
         arr2 = this.arr.subList(section,section*2);
         arr3 = this.arr.subList(section*2,section*3);
         arr4 = this.arr.subList(section*3,section*4);
+
 
     }
 
@@ -62,7 +63,7 @@ class benchExplicit implements Runnable {
 
             @Override
             public void run() {
-               arr1 = sort(arr1);
+                sorter s = new sorter(arr1);
 
                }
 
@@ -79,7 +80,7 @@ class benchExplicit implements Runnable {
 
             @Override
             public void run() {
-               arr2 = sort(arr2);
+                sorter s = new sorter(arr2);
 
                }
 
@@ -96,7 +97,7 @@ class benchExplicit implements Runnable {
 
             @Override
             public void run() {
-               arr3 = sort(arr3);
+                sorter s = new sorter(arr3);
 
                }
 
@@ -113,8 +114,7 @@ class benchExplicit implements Runnable {
 
             @Override
             public void run() {
-               arr4 = sort(arr4);
-
+                sorter s = new sorter(arr4);
                }
 
         });
@@ -133,8 +133,8 @@ class benchExplicit implements Runnable {
         temp.addAll(arr2);
         temp.addAll(arr3);
         temp.addAll(arr4);
-        
-        arr = (ArrayList<Integer>) sort(temp);
+
+        sorter s = new sorter(temp);
 
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;

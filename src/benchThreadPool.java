@@ -85,7 +85,8 @@ public class benchThreadPool {
 
         executor.shutdown();
 
-        List<Integer> done = sort(sorted);
+       sorter s = new sorter(sorted);
+
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
@@ -95,28 +96,6 @@ public class benchThreadPool {
     }
 
 
-    public  List<Integer> sort( List<Integer> arr12) {
-
-        release = true;
-        while (release) {
-            release = false;
-            for (int i = 1; i < arr12.size()-1; i++) {
-
-                int temp;
-                for( int k=0; k<arr12.size()-1; k++ ) {
-                    for ( int j=k+1; j<arr12.size(); j++ ){
-                        if( arr12.get(j) < arr12.get(k) ) {
-                            temp = arr12.get(k);
-                            arr12.set(k,arr12.get(j));
-                            arr12.set(j,temp);
-                        }
-                    }
-                }
-            }
-        }
-
-        return arr12;
-    }
 
 
 
@@ -138,35 +117,15 @@ public class benchThreadPool {
         }
 
 
-        public  List<Integer> sort( List<Integer> arr12) {
 
-            release = true;
-            while (release) {
-                release = false;
-                for (int i = 1; i < arr12.size()-1; i++) {
-
-                    int temp;
-                    for( int k=0; k<arr12.size()-1; k++ ) {
-                        for ( int j=k+1; j<arr12.size(); j++ ){
-                            if( arr12.get(j) < arr12.get(k) ) {
-                                temp = arr12.get(k);
-                                arr12.set(k,arr12.get(j));
-                                arr12.set(j,temp);
-                            }
-                        }
-                    }
-                }
-            }
-            return arr12;
-        }
 
 
 
         @Override
         public List<Integer> call() throws Exception {
             List<Integer> sort = work;
-
-             sorted.addAll(sort(sort));
+             sorter s = new sorter(sort);
+             sorted.addAll(sort);
 
             return  sorted;
         }

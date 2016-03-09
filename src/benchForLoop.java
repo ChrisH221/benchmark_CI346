@@ -17,7 +17,6 @@ public class benchForLoop{
     public benchForLoop(ArrayList<Integer> arr){
 
         this.arr = arr;
-
     }
 
     /**
@@ -27,32 +26,39 @@ public class benchForLoop{
      */
 
     public double test1() {
+        int count = 0;
+      long start = System.nanoTime();
 
-        long start = System.nanoTime();
+        sorter s = new sorter(arr);
+      // boolean release = true;
+     //   while (release) {
+      //      release = false;
+       //     for (int x = 1; x < arr.size()-1; x++) {
 
-        boolean release = true;
-        while (release) {
-            release = false;
-            for (int x = 1; x < arr.size()-1; x++) {
+        //        int temp;
+        //        for( int y=0; y<arr.size()-1; y++ ) {
+         //           for ( int z=y+1; z<arr.size(); z++ ){
+        //                if( arr.get(z) < arr.get(y) ) {
+         //                   temp = arr.get(y);
+          //                  arr.set(y,arr.get(z));
+           //                 arr.set(z,temp);
+          //              }
+         //           }
+        //        }
+         //       count++;
+        //        System.out.println(count);
+        //    }
+     //   }
 
-                int temp;
-                for( int y=0; y<arr.size()-1; y++ ) {
-                    for ( int z=y+1; z<arr.size(); z++ ){
-                        if( arr.get(z) < arr.get(y) ) {
-                            temp = arr.get(y);
-                            arr.set(y,arr.get(z));
-                            arr.set(z,temp);
-                        }
-                    }
-                }
-            }
-        }
 
 
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
         return seconds;
     }
+
+
+
 
 
 }

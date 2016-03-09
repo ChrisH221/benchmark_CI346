@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -13,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class benchImplicit {
 
     ArrayList arr = new ArrayList();
+    ArrayList arr2 = new ArrayList();
     public benchImplicit(ArrayList arr){
 
     this.arr = arr;
@@ -25,8 +28,9 @@ public class benchImplicit {
 
         long start = System.nanoTime();
 
-        arr.parallelStream()
-                .sorted();
+
+        arr.parallelStream().sorted();
+
         long finish = System.nanoTime();
 
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;

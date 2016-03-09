@@ -15,12 +15,12 @@ public class benchMark {
 	 ArrayList<Integer> arr2 = new ArrayList<>();
 	 ArrayList<Integer> arr3 = new ArrayList<>();
     ArrayList<Integer> arr4 = new ArrayList<>();
-
+    boolean setup = false;
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=3000; ++idx){
-            int randomInt = randomGenerator.nextInt(10000);
+        for (int idx = 1; idx <=1000000; ++idx){
+            int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
         }
@@ -32,12 +32,13 @@ public class benchMark {
 
     	for(Integer i : arr) {
     	    arr1.add(i);
+
     	}
-    	
+
     	for(Integer i : arr) {
     	    arr2.add(i);
     	}
-    	 
+
     	for(Integer i : arr) {
     	    arr3.add(i);
     	}
@@ -47,34 +48,51 @@ public class benchMark {
         }
 
 
-
+        setup = true;
 
     }
-    
+
+    public ArrayList<Integer> getArr() {
+        return arr;
+    }
+
     public void runBench(){
-    	
-       
-        benchForLoop bfl = new benchForLoop(arr);
-     //   System.out.println("benchForLoop test time = " + bfl.test1());
-        benchExplicit bex = new benchExplicit(arr);
-    //    bex.run();
-        benchThreadPool btp = new benchThreadPool(arr);
-        System.out.println("benchThreadPool test time = " +btp.test());
-     //   System.out.println("benchExplicit test time = " + bex.result);
-        benchImplicit bIm = new benchImplicit(arr);
+
+        benchForLoop bfl = new benchForLoop(arr2);
+        System.out.println("benchForLoop test time = " + bfl.test1());
+
+        benchImplicit bIm = new benchImplicit(arr1);
+
         System.out.println("benchImplicit test time = " + bIm.test1());
 
+
+        benchExplicit bex = new benchExplicit(arr3);
+         bex.run();
+        System.out.println("benchExplicit test time = " + bex.result);
+        benchThreadPool btp = new benchThreadPool(arr4);
+       System.out.println("benchThreadPool test time = " +btp.test());
+
+
+
     	
     }
+    public void run(){
 
+
+       setupBench();
+
+        while(setup){
+            runBench();
+            setup = false;        }
+
+    }
 
     public static void main (String[] args){
-    	
-    	 
-    	
+
+
         benchMark b = new benchMark();
-     //   b.setupBench();
-        b.runBench();
+        b.run();
+
         
         
     
