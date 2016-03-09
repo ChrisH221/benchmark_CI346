@@ -19,8 +19,8 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=20; ++idx){
-            int randomInt = randomGenerator.nextInt(100);
+        for (int idx = 1; idx <=3000; ++idx){
+            int randomInt = randomGenerator.nextInt(10000);
             arr.add(randomInt);
            
         }
@@ -28,8 +28,8 @@ public class benchMark {
     }
     
     public void setupBench(){
-    	
-    	
+
+
     	for(Integer i : arr) {
     	    arr1.add(i);
     	}
@@ -54,14 +54,14 @@ public class benchMark {
     public void runBench(){
     	
        
-        benchForLoop bfl = new benchForLoop(arr1);
-        System.out.println("benchForLoop test time = " + bfl.test1());
-        benchExplicit bex = new benchExplicit(arr2);
-        bex.run();
-        benchThreadPool btp = new benchThreadPool(arr3);
-        System.out.println(btp.test());
-        System.out.println("benchExplicit test time = " + bex.result);
-        benchImplicit bIm = new benchImplicit(arr4);
+        benchForLoop bfl = new benchForLoop(arr);
+     //   System.out.println("benchForLoop test time = " + bfl.test1());
+        benchExplicit bex = new benchExplicit(arr);
+    //    bex.run();
+        benchThreadPool btp = new benchThreadPool(arr);
+        System.out.println("benchThreadPool test time = " +btp.test());
+     //   System.out.println("benchExplicit test time = " + bex.result);
+        benchImplicit bIm = new benchImplicit(arr);
         System.out.println("benchImplicit test time = " + bIm.test1());
 
     	
@@ -73,7 +73,7 @@ public class benchMark {
     	 
     	
         benchMark b = new benchMark();
-        b.setupBench();
+     //   b.setupBench();
         b.runBench();
         
         

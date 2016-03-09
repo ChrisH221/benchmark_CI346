@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Chris Howell on 10/12/2015.
@@ -22,10 +23,10 @@ public class benchForLoop{
     /**
      * The test method for this class takes the ArrayList and sorts it before
      * returning the time it took to sort.
-     * @return long
+     * @return double
      */
 
-    public long test1() {
+    public double test1() {
 
         long start = System.nanoTime();
 
@@ -49,7 +50,8 @@ public class benchForLoop{
 
 
         long finish = System.nanoTime();
-        return finish - start;
+        double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
+        return seconds;
     }
 
 

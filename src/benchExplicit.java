@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Chris on 10/12/2015.
@@ -17,7 +18,7 @@ class benchExplicit implements Runnable {
     List<Integer> arr4;
     
     boolean release = false;
-    public long result;
+    public double result;
 
     public benchExplicit(ArrayList<Integer> arr){
 
@@ -136,8 +137,9 @@ class benchExplicit implements Runnable {
         arr = (ArrayList<Integer>) sort(temp);
 
         long finish = System.nanoTime();
-       
-        result = finish - start;
+        double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
+
+        result = seconds;
 
 
     }

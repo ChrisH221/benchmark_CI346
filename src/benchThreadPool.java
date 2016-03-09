@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Random;
+import java.util.concurrent.*;
 
 /**
  * Created by chris on 27/02/16.
@@ -14,45 +14,83 @@ import java.util.concurrent.Executors;
 public class benchThreadPool {
 
     ArrayList<List<Integer>> arr = new ArrayList<>();
-    int cores;
+
     boolean release = false;
+    int cores = Runtime.getRuntime().availableProcessors();
+    List<Integer> sorted =  new ArrayList<>();
+
 
     public benchThreadPool(ArrayList<Integer> arr1){
-
-        int cores = Runtime.getRuntime().availableProcessors();
-        this.cores = cores;
         int  section = arr1.size() / cores;
-        int increment = 0;
-        int y = 1;
 
-        for(int x = 0; x < cores-1; x++){
-            List<Integer> temp = arr1.subList(increment*section,(section-1)*y);
-             arr.add(temp);
-             x++;
+        int increment = 0;
+        int y = 2;
+
+
+        for(int x = 0; x < cores; x++){
+
+            if(x == 0){
+                List<Integer> temp = arr1.subList(increment*section,(section));
+                arr.add(temp);
+                increment++;
+            }
+            else{
+                List<Integer> temp = arr1.subList(increment*section,section*y);
+                arr.add(temp);
+                increment++;
+                y++;
+            }
+
         }
+       // arr.get(0).forEach(x-> System.out.println(x));
 
     }
 
-    public long test(){
+    public double test(){
 
         long start = System.nanoTime();
-        ArrayList<List<Integer>> arr = new ArrayList<>();
-        List<Integer> sorted =  new ArrayList<>();
 
-        for(int x = 0; x < arr.size()-1; x++){
 
-            List<Integer> temp =arr.get(x);
 
-            worker work = new worker(temp);
-            work.run();
-            List<Integer> temp2 = work.getArr();
-            sorted.addAll(temp2);
 
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
+
+        List<Future<List<Integer>>> resultList = new ArrayList<>();
+
+        for (int i=0; i<cores; i++)
+        {
+
+            worker work  = new worker(arr.get(i));
+            Future<List<Integer>> result = executor.submit(work);
+             resultList.add(result);
         }
-        List<Integer> complete = sort(sorted);
+
+
+        for(Future<List<Integer>> future : resultList)
+        {
+            try
+            {
+              //  System.out.println(future.get());
+                sorted.addAll(future.get());
+              //  future.get().forEach(x -> System.out.println(x));
+
+
+
+            }
+            catch (InterruptedException | ExecutionException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        executor.shutdown();
+
+        List<Integer> done = sort(sorted);
         long finish = System.nanoTime();
-        long result = finish - start;
-        return result;
+        double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
+
+        return seconds;
+
 
     }
 
@@ -83,30 +121,19 @@ public class benchThreadPool {
 
 
 
-    class worker implements Runnable{
 
+    class worker implements Callable<List<Integer>>
+    {
+        List<Integer> sorted = new ArrayList<>();
         final List<Integer> arr1 = new ArrayList<>();
         List<Integer> work;
         boolean release = false;
 
+
         public worker(List<Integer> work){
 
-        this.work = work;
 
-        }
-
-
-        @Override
-        public void run() {
-
-            arr1.addAll(sort(work));
-
-            for(int x =0; x < arr1.size();x++) System.out.println(arr1.get(x));
-        }
-
-        public List<Integer> getArr(){
-
-            return arr1;
+            this.work = work;
 
         }
 
@@ -130,12 +157,20 @@ public class benchThreadPool {
                     }
                 }
             }
-
             return arr12;
         }
 
-    }
 
+
+        @Override
+        public List<Integer> call() throws Exception {
+            List<Integer> sort = work;
+
+             sorted.addAll(sort(sort));
+
+            return  sorted;
+        }
+    }
 
 }
 

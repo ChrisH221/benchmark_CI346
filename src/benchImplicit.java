@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Chris Howell on 10/12/2015.
@@ -20,14 +21,16 @@ public class benchImplicit {
 
     }
 
-    public long test1() {
+    public double test1() {
 
         long start = System.nanoTime();
 
         arr.parallelStream()
                 .sorted();
         long finish = System.nanoTime();
-        return finish - start;
+
+        double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
+        return seconds;
     }
 
 
