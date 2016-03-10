@@ -11,7 +11,7 @@ import java.util.concurrent.*;
  * number of cores, then generates the appropriate number of threads. Afterwards,
  * it handles the lifetime of a thread while it completes it's operation.
  */
-public class benchThreadPool {
+public class benchThreadPool implements sorter {
 
     ArrayList<List<Integer>> arr = new ArrayList<>();
 
@@ -42,7 +42,7 @@ public class benchThreadPool {
             }
 
         }
-       // arr.get(0).forEach(x-> System.out.println(x));
+        // arr.get(0).forEach(x-> System.out.println(x));
 
     }
 
@@ -57,12 +57,12 @@ public class benchThreadPool {
 
         List<Future<List<Integer>>> resultList = new ArrayList<>();
 
-        for (int i=0; i<cores; i++)
+        for (int i=0; i<executor.getCorePoolSize(); i++)
         {
 
             worker work  = new worker(arr.get(i));
             Future<List<Integer>> result = executor.submit(work);
-             resultList.add(result);
+            resultList.add(result);
         }
 
 
@@ -70,9 +70,9 @@ public class benchThreadPool {
         {
             try
             {
-              //  System.out.println(future.get());
+                //  System.out.println(future.get());
                 sorted.addAll(future.get());
-              //  future.get().forEach(x -> System.out.println(x));
+                //  future.get().forEach(x -> System.out.println(x));
 
 
 
@@ -85,8 +85,7 @@ public class benchThreadPool {
 
         executor.shutdown();
 
-       sorter s = new sorter(sorted);
-
+        List<Integer> done = sort(sorted);
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
@@ -94,10 +93,6 @@ public class benchThreadPool {
 
 
     }
-
-
-
-
 
 
 
@@ -116,20 +111,14 @@ public class benchThreadPool {
 
         }
 
-
-
-
-
-
         @Override
         public List<Integer> call() throws Exception {
             List<Integer> sort = work;
-             sorter s = new sorter(sort);
-             sorted.addAll(sort);
+
+            sorted.addAll(sort(sort));
 
             return  sorted;
         }
     }
 
 }
-

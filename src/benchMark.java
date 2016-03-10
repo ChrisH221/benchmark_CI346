@@ -19,7 +19,7 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=1000000; ++idx){
+        for (int idx = 1; idx <=10000; ++idx){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
@@ -29,32 +29,15 @@ public class benchMark {
     
     public void setupBench(){
 
-
-    	for(Integer i : arr) {
-    	    arr1.add(i);
-
-    	}
-
-    	for(Integer i : arr) {
-    	    arr2.add(i);
-    	}
-
-    	for(Integer i : arr) {
-    	    arr3.add(i);
-    	}
-
-        for(Integer i : arr) {
-            arr4.add(i);
-        }
-
-
+        arr.forEach(x -> arr1.add(x));
+        arr.forEach(x -> arr2.add(x));
+        arr.forEach(x -> arr3.add(x));
+        arr.forEach(x -> arr4.add(x));
         setup = true;
 
     }
 
-    public ArrayList<Integer> getArr() {
-        return arr;
-    }
+
 
     public void runBench(){
 
@@ -67,8 +50,7 @@ public class benchMark {
 
 
         benchExplicit bex = new benchExplicit(arr3);
-         bex.run();
-        System.out.println("benchExplicit test time = " + bex.result);
+        System.out.println("benchExplicit test time = " + bex.test());
         benchThreadPool btp = new benchThreadPool(arr4);
        System.out.println("benchThreadPool test time = " +btp.test());
 

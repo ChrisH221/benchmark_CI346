@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -8,15 +9,15 @@ import java.util.concurrent.TimeUnit;
  * This class takes an ArrayList and using a for loop sorts the array.
  *
  */
-public class benchForLoop{
+public class benchForLoop implements sorter{
 
-    ArrayList<Integer> arr;
+    List<Integer> arr;
 
 
 
     public benchForLoop(ArrayList<Integer> arr){
 
-        this.arr = arr;
+        this.arr = arr.subList(0,arr.size()-1);
     }
 
     /**
@@ -26,30 +27,12 @@ public class benchForLoop{
      */
 
     public double test1() {
-        int count = 0;
+
+
       long start = System.nanoTime();
 
-        sorter s = new sorter(arr);
-      // boolean release = true;
-     //   while (release) {
-      //      release = false;
-       //     for (int x = 1; x < arr.size()-1; x++) {
 
-        //        int temp;
-        //        for( int y=0; y<arr.size()-1; y++ ) {
-         //           for ( int z=y+1; z<arr.size(); z++ ){
-        //                if( arr.get(z) < arr.get(y) ) {
-         //                   temp = arr.get(y);
-          //                  arr.set(y,arr.get(z));
-           //                 arr.set(z,temp);
-          //              }
-         //           }
-        //        }
-         //       count++;
-        //        System.out.println(count);
-        //    }
-     //   }
-
+      arr = sort(arr);
 
 
         long finish = System.nanoTime();
