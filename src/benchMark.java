@@ -19,7 +19,7 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=10000; ++idx){
+        for (int idx = 1; idx <=20; ++idx){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
@@ -50,7 +50,8 @@ public class benchMark {
 
 
         benchExplicit bex = new benchExplicit(arr3);
-        System.out.println("benchExplicit test time = " + bex.test());
+        bex.run();
+        System.out.println("benchExplicit test time = " + bex.result);
         benchThreadPool btp = new benchThreadPool(arr4);
        System.out.println("benchThreadPool test time = " +btp.test());
 

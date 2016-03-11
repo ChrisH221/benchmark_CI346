@@ -1,128 +1,87 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.*;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Created by chris on 27/02/16.
+ * Created by Chris on 10/12/2015.
  *
- * The thread pool class features an inner class which represents the worker
- * thread process for this class. The main thread pool class calculates the
- * number of cores, then generates the appropriate number of threads. Afterwards,
- * it handles the lifetime of a thread while it completes it's operation.
+ * This class explicitly defines threads to sort smaller sections of the ArrayList. After these
+ * smaller sections have been sorted the thread pool then reconnects these segments and sorts
+ * the complete ArrayList.
  */
-public class benchExplicit implements sorter{
+class benchExplicit implements Runnable,sorter {
 
-    ArrayList<List<Integer>> arr = new ArrayList<>();
+
+    ArrayList<Integer> arr;
+    List<Integer> arr1;
+    List<Integer> arr2;
 
     boolean release = false;
-    int cores = 2;
-    List<Integer> sorted =  new ArrayList<>();
+    public double result;
 
+    public benchExplicit(ArrayList<Integer> arr){
 
-    public benchExplicit(ArrayList<Integer> arr1){
-        int  section = arr1.size() / cores;
+        this.arr = arr;
+        int  section = arr.size() / 2;
 
-        int increment = 0;
-        int y = 2;
-
-
-        for(int x = 0; x < cores; x++){
-
-            if(x == 0){
-                List<Integer> temp = arr1.subList(increment*section,(section));
-                arr.add(temp);
-                increment++;
-            }
-            else{
-                List<Integer> temp = arr1.subList(increment*section,section*y);
-                arr.add(temp);
-                increment++;
-                y++;
-            }
-
-        }
-        // arr.get(0).forEach(x-> System.out.println(x));
+        arr1 = this.arr.subList(0, section);
+        arr2 = this.arr.subList(section,section*2);
 
     }
 
-    public double test(){
 
+
+
+
+    public void run() {
         long start = System.nanoTime();
+        Thread thread1 = new Thread(new Runnable(){
 
+            @Override
+            public void run() {
+                arr1 = sort(arr1);
 
+            }
 
+        });
+        thread1.start();
+        try {
+            thread1.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
+        Thread thread2 = new Thread(new Runnable(){
 
-        List<Future<List<Integer>>> resultList = new ArrayList<>();
+            @Override
+            public void run() {
+                arr2 = sort(arr2);
 
-        for (int i=0; i<cores; i++)
-        {
+            }
 
-            worker work  = new worker(arr.get(i));
-            Future<List<Integer>> result = executor.submit(work);
-            resultList.add(result);
+        });
+        thread2.start();
+        try {
+              thread2.join();
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
         }
 
 
-        for(Future<List<Integer>> future : resultList)
-        {
-            try
-            {
-                //  System.out.println(future.get());
-                sorted.addAll(future.get());
-                //  future.get().forEach(x -> System.out.println(x));
+        List<Integer> temp = new ArrayList<Integer>();
+        temp.addAll(arr1);
+        temp.addAll(arr2);
 
 
-
-            }
-            catch (InterruptedException | ExecutionException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        executor.shutdown();
-
-        List<Integer> done = sort(sorted);
+        arr = (ArrayList<Integer>) sort(temp);
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
-        return seconds;
+        result = seconds;
 
 
     }
 
-
-
-
-
-
-
-    class worker implements Callable<List<Integer>>
-    {
-        List<Integer> sorted = new ArrayList<>();
-        final List<Integer> arr1 = new ArrayList<>();
-        List<Integer> work;
-        boolean release = false;
-
-
-        public worker(List<Integer> work){
-
-
-            this.work = work;
-
-        }
-
-        @Override
-        public List<Integer> call() throws Exception {
-            List<Integer> sort = work;
-
-            sorted.addAll(sort(sort));
-
-            return  sorted;
-        }
-    }
 
 }
