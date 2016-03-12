@@ -19,7 +19,7 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=100000; ++idx){
+        for (int idx = 1; idx <=1000000; ++idx){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
