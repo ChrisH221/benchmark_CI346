@@ -6,20 +6,22 @@ import java.util.ArrayList;
  *
  * The main benchmark class for the application is responsible for initializing the
  * various classes and running the tests contained in these classes. It also prints
- * each of the resulting test times.
+ * each of the resulting test times. It contains a setup method
  */
 public class benchMark {
 
     ArrayList<Integer> arr = new ArrayList<>();
     ArrayList<Integer> arr1 = new ArrayList<>();
-	 ArrayList<Integer> arr2 = new ArrayList<>();
-	 ArrayList<Integer> arr3 = new ArrayList<>();
+    ArrayList<Integer> arr2 = new ArrayList<>();
+    ArrayList<Integer> arr3 = new ArrayList<>();
     ArrayList<Integer> arr4 = new ArrayList<>();
+
     boolean setup = false;
+
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int idx = 1; idx <=1000000; ++idx){
+        for (int randNum = 1; randNum <=100000; ++randNum){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
@@ -38,32 +40,54 @@ public class benchMark {
     }
 
 
+    public void bench1(){
 
-    public void runBench(){
-
-        benchForLoop bfl = new benchForLoop(arr2);
+        benchNon bfl = new benchNon(arr2);
         System.out.println("benchForLoop test time = " + bfl.test1());
 
-        benchImplicit bIm = new benchImplicit(arr1);
 
+    }
+
+    public void bench2(){
+
+
+        benchImplicit bIm = new benchImplicit(arr1);
         System.out.println("benchImplicit test time = " + bIm.test1());
+
+
+    }
+
+    public void bench3(){
+
+        benchThreadPool btp = new benchThreadPool(arr4);
+        System.out.println("benchThreadPool test time = " +btp.test());
+
+    }
+
+    public void bench4(){
 
 
         benchExplicit bex = new benchExplicit(arr3);
         bex.run();
         System.out.println("benchExplicit test time = " + bex.result);
-        benchThreadPool btp = new benchThreadPool(arr4);
-       System.out.println("benchThreadPool test time = " +btp.test());
+
+    }
 
 
+    public void runBench(){
 
-    	
+        bench4();
+        bench2();
+        bench3();
+    //    bench1();
+
+
     }
     public void run(){
 
 
        setupBench();
-
+        //Just to ensure all array copies are created before running test
         while(setup){
             runBench();
             setup = false;        }
@@ -75,10 +99,6 @@ public class benchMark {
 
         benchMark b = new benchMark();
         b.run();
-
-        
-        
-    
 
 
     }

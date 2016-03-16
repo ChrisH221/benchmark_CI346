@@ -12,13 +12,39 @@ import java.util.concurrent.TimeUnit;
  * This class takes an ArrayList and uses a parallel stream to sort the ArrayList
  * before returning the times.
  */
-public class benchImplicit {
+public class benchImplicit implements sorter {
 
-    ArrayList arr = new ArrayList<Integer>();
-    ArrayList arr2 = new ArrayList();
-    public benchImplicit(ArrayList arr){
+    List<Integer> arr = new ArrayList<>();
+    List<Integer> temp = new ArrayList<>();
 
-    this.arr = arr;
+    boolean release = false;
+    int cores = Runtime.getRuntime().availableProcessors();
+    List<Integer> sorted =  new ArrayList<>();
+
+
+    public benchImplicit(ArrayList<Integer> arr1){
+        int  section = arr1.size() / cores;
+
+ //       int increment = 0;
+//      int y = 2;
+
+
+//        for(int x = 0; x < cores; x++){
+
+            //if(x == 0){
+               // List<Integer> temp = arr1.subList(increment*section,(section));
+               // arr.add(temp);
+              //  increment++;
+            //}
+           // else{
+             //   List<Integer> temp = arr1.subList(increment*section,section*y);
+           //     arr.add(temp);
+       //         increment++;
+         //       y++;
+     //       }
+
+   //     }
+        // arr.get(0).forEach(x-> System.out.println(x));
 
     }
 
@@ -26,11 +52,8 @@ public class benchImplicit {
 
         long start = System.nanoTime();
 
-
-
-            arr.parallelStream().sorted(new BubblesortListSorter(arr));
-
-
+        arr.parallelStream().sorted().forEachOrdered(x -> temp.add(x));
+         sorted = sort(sorted);
         long finish = System.nanoTime();
 
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
@@ -38,35 +61,6 @@ public class benchImplicit {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public  class BubblesortListSorter implements Comparator<Integer> {
-
-        public BubblesortListSorter(ArrayList<Integer> arr){
-
-            sort(arr);
-
-        }
-
-        public int compare(Integer o1, Integer o2) {
-           if(o1 < o2) return 01;
-           else return 02;
-        }
-
-        List<Integer> sort(List<Integer> arr){
-            int temp;
-            for( int y=0; y<arr.size()-1; y++ ) {
-                for ( int z=y+1; z<arr.size(); z++ ){
-                    if(compare(arr.get(z),arr.get(y) ) == 1 ) {
-                        temp = arr.get(y);
-                        arr.set(y,arr.get(z));
-                        arr.set(z,temp);
-                    }
-                }
-            }
-
-            return arr;
-        }
-    }
 
     }
 
