@@ -15,7 +15,7 @@ class benchExplicit implements Runnable,sorter {
     List<Integer> arr1;
     List<Integer> arr2;
 
-    boolean release = false;
+    long count = 0;
     public double result;
 
     public benchExplicit(ArrayList<Integer> arr){
@@ -38,7 +38,12 @@ class benchExplicit implements Runnable,sorter {
 
             @Override
             public void run() {
-                arr1 = sort(arr1);
+
+                for(int x = 0; x < arr1.size();x++){
+
+                    if(isPrime(arr1.get(x))) count+=1;
+
+                }
 
             }
 
@@ -55,7 +60,12 @@ class benchExplicit implements Runnable,sorter {
 
             @Override
             public void run() {
-                arr2 = sort(arr2);
+
+                for(int x = 0; x < arr2.size();x++){
+
+                    if(isPrime(arr2.get(x))) count+=1;
+
+                }
 
             }
 
@@ -69,15 +79,11 @@ class benchExplicit implements Runnable,sorter {
         }
 
 
-        List<Integer> temp = new ArrayList<Integer>();
-        temp.addAll(arr1);
-        temp.addAll(arr2);
 
-
-        arr = (ArrayList<Integer>) sort(temp);
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
+       System.out.println(count);
         result = seconds;
 
 

@@ -18,6 +18,7 @@ public class benchThreadPool implements sorter {
     boolean release = false;
     int cores = Runtime.getRuntime().availableProcessors();
     List<Integer> sorted =  new ArrayList<>();
+    long count = 0;
 
 
     public benchThreadPool(ArrayList<Integer> arr1){
@@ -55,23 +56,23 @@ public class benchThreadPool implements sorter {
 
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
 
-        List<Future<List<Integer>>> resultList = new ArrayList<>();
+        List<Future<Long>> resultList = new ArrayList<>();
 
         for (int i=0; i<executor.getCorePoolSize(); i++)
         {
 
             worker work  = new worker(arr.get(i));
-            Future<List<Integer>> result = executor.submit(work);
+            Future<Long> result = executor.submit(work);
             resultList.add(result);
         }
 
 
-        for(Future<List<Integer>> future : resultList)
+        for(Future<Long> future : resultList)
         {
             try
             {
                 //  System.out.println(future.get());
-                sorted.addAll(future.get());
+               count += future.get();
                 //  future.get().forEach(x -> System.out.println(x));
 
 
@@ -85,7 +86,7 @@ public class benchThreadPool implements sorter {
 
         executor.shutdown();
 
-        List<Integer> done = sort(sorted);
+        System.out.println(count);
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
@@ -96,12 +97,12 @@ public class benchThreadPool implements sorter {
 
 
 
-    class worker implements Callable<List<Integer>>
+    class worker implements Callable<Long>
     {
         List<Integer> sorted = new ArrayList<>();
         final List<Integer> arr1 = new ArrayList<>();
         List<Integer> work;
-        boolean release = false;
+
 
 
         public worker(List<Integer> work){
@@ -112,12 +113,17 @@ public class benchThreadPool implements sorter {
         }
 
         @Override
-        public List<Integer> call() throws Exception {
+        public Long call() throws Exception{
+
             List<Integer> sort = work;
 
-            sorted.addAll(sort(sort));
+            long thisCount =0;
+        for(int x = 0; x < work.size();x++){
 
-            return  sorted;
+            if(isPrime(work.get(x)))  thisCount+=1;
+
+        }
+            return thisCount;
         }
     }
 

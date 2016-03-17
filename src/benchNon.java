@@ -33,11 +33,16 @@ public class benchNon implements sorter{
 
 
       long start = System.nanoTime();
+      long count=0;
+      ;
+      // q.sort(arr);
+      for(int x = 0; x < arr.size();x++){
 
-        QuickSort q = new QuickSort();
-       q.sort(arr);
-        arr.forEach(x -> System.out.println(x));
+          if(isPrime(arr.get(x))) count+=1;
 
+      }
+
+       System.out.println(count);
 
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
@@ -48,11 +53,7 @@ public class benchNon implements sorter{
 
         long start = System.nanoTime();
 
-        arr.forEach(x -> {
-
-            if(isPrime(x)== true)  temp.add(x);
-
-            });
+        arr.forEach(x -> {if(isPrime(x)) temp.add(x);});
 
         System.out.println(temp.size());
 

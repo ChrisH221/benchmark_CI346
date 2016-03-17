@@ -21,7 +21,7 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int randNum = 1; randNum <=100000; ++randNum){
+        for (int randNum = 1; randNum <=10000000; ++randNum){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
@@ -76,10 +76,11 @@ public class benchMark {
 
     public void runBench(){
 
+        bench1();
         bench4();
         bench2();
         bench3();
-    //    bench1();
+
 
 
     }
@@ -94,12 +95,10 @@ public class benchMark {
 
     }
 
-    public static void main (String[] args){
-
+    public static void main(String[] args){
 
         benchMark b = new benchMark();
         b.run();
-
 
     }
 }

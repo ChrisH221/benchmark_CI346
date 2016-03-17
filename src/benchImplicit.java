@@ -24,7 +24,7 @@ public class benchImplicit implements sorter {
 
     public benchImplicit(ArrayList<Integer> arr1){
         int  section = arr1.size() / cores;
-
+        this.arr = arr1;
  //       int increment = 0;
 //      int y = 2;
 
@@ -52,8 +52,9 @@ public class benchImplicit implements sorter {
 
         long start = System.nanoTime();
 
-        arr.parallelStream().sorted().forEachOrdered(x -> temp.add(x));
-         sorted = sort(sorted);
+        long count = arr.parallelStream().filter(x -> (isPrime(x))).count();
+
+        System.out.println(count);
         long finish = System.nanoTime();
 
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
