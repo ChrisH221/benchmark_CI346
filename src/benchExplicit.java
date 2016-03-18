@@ -4,11 +4,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Chris on 10/12/2015.
  *
- * This class explicitly defines threads to sort smaller sections of the ArrayList. After these
- * smaller sections have been sorted the thread pool then reconnects these segments and sorts
- * the complete ArrayList.
+ * This class uses raw threads to count the prime numbers. It works
+ * by breaking the array into two separate arrays, and then sequentially
+ * checks these two arrays for prime numbers.
  */
-class benchExplicit implements Runnable,sorter {
+class benchExplicit implements Runnable,prime {
 
 
     ArrayList<Integer> arr;
@@ -17,6 +17,7 @@ class benchExplicit implements Runnable,sorter {
 
     long count = 0;
     public double result;
+    public boolean complete = false;
 
     public benchExplicit(ArrayList<Integer> arr){
 
@@ -27,10 +28,6 @@ class benchExplicit implements Runnable,sorter {
         arr2 = this.arr.subList(section,section*2);
 
     }
-
-
-
-
 
     public void run() {
         long start = System.nanoTime();
@@ -50,10 +47,9 @@ class benchExplicit implements Runnable,sorter {
         });
         thread1.start();
         try {
-            thread1.join();
+            thread1.join();// Wait for calculation to finish.
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+             e.printStackTrace();
         }
 
         Thread thread2 = new Thread(new Runnable(){
@@ -72,7 +68,7 @@ class benchExplicit implements Runnable,sorter {
         });
         thread2.start();
         try {
-              thread2.join();
+              thread2.join();// Wait for calculation to finish.
         } catch (InterruptedException e) {
 
             e.printStackTrace();
@@ -83,11 +79,13 @@ class benchExplicit implements Runnable,sorter {
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
 
-       System.out.println(count);
+        System.out.println("Total number of prime numbers found=" + count);
+
         result = seconds;
 
-
+        complete = true;
     }
 
 
 }
+

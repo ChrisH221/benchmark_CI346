@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.*;
 
 /**
@@ -9,16 +8,16 @@ import java.util.concurrent.*;
  * The thread pool class features an inner class which represents the worker
  * thread process for this class. The main thread pool class calculates the
  * number of cores, then generates the appropriate number of threads. Afterwards,
- * it handles the lifetime of a thread while it completes it's operation.
+ * it handles the lifetime of a thread while it completes it's operation. A Thread Pool
+ * Executor handles the thread creations and execution.
  */
-public class benchThreadPool implements sorter {
+public class benchThreadPool implements prime {
 
     ArrayList<List<Integer>> arr = new ArrayList<>();
 
     boolean release = false;
     int cores = Runtime.getRuntime().availableProcessors();
-    List<Integer> sorted =  new ArrayList<>();
-    long count = 0;
+     long count = 0;
 
 
     public benchThreadPool(ArrayList<Integer> arr1){
@@ -43,7 +42,7 @@ public class benchThreadPool implements sorter {
             }
 
         }
-        // arr.get(0).forEach(x-> System.out.println(x));
+
 
     }
 
@@ -51,32 +50,23 @@ public class benchThreadPool implements sorter {
 
         long start = System.nanoTime();
 
-
-
-
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
 
-        List<Future<Long>> resultList = new ArrayList<>();
+        List<Future<Long>> results = new ArrayList<>();
 
         for (int i=0; i<executor.getCorePoolSize(); i++)
         {
-
             worker work  = new worker(arr.get(i));
             Future<Long> result = executor.submit(work);
-            resultList.add(result);
+            results.add(result);
         }
 
 
-        for(Future<Long> future : resultList)
+        for(Future<Long> future : results)
         {
             try
             {
-                //  System.out.println(future.get());
-               count += future.get();
-                //  future.get().forEach(x -> System.out.println(x));
-
-
-
+               count += future.get();//Get's the value from the worker, but blocks the thread while it does.
             }
             catch (InterruptedException | ExecutionException e)
             {
@@ -85,25 +75,18 @@ public class benchThreadPool implements sorter {
         }
 
         executor.shutdown();
-
-        System.out.println(count);
         long finish = System.nanoTime();
         double seconds = TimeUnit.MILLISECONDS.convert(finish - start, TimeUnit.NANOSECONDS) / 1000.0;
-
+        System.out.println("Total number of prime numbers found=" + count);
         return seconds;
 
 
     }
 
-
-
     class worker implements Callable<Long>
     {
-        List<Integer> sorted = new ArrayList<>();
-        final List<Integer> arr1 = new ArrayList<>();
+
         List<Integer> work;
-
-
 
         public worker(List<Integer> work){
 
@@ -115,14 +98,10 @@ public class benchThreadPool implements sorter {
         @Override
         public Long call() throws Exception{
 
-            List<Integer> sort = work;
-
             long thisCount =0;
-        for(int x = 0; x < work.size();x++){
 
-            if(isPrime(work.get(x)))  thisCount+=1;
+            for(Integer num : work)  if(isPrime(num))  thisCount+=1;
 
-        }
             return thisCount;
         }
     }

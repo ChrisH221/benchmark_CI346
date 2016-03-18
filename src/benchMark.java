@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * The main benchmark class for the application is responsible for initializing the
  * various classes and running the tests contained in these classes. It also prints
- * each of the resulting test times. It contains a setup method
+ * each of the resulting test times.
  */
 public class benchMark {
 
@@ -21,84 +21,59 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int randNum = 1; randNum <=10000000; ++randNum){
+        for (int randNum = 1; randNum <=100000000; ++randNum){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
         }
 
     }
-    
-    public void setupBench(){
-
-        arr.forEach(x -> arr1.add(x));
-        arr.forEach(x -> arr2.add(x));
-        arr.forEach(x -> arr3.add(x));
-        arr.forEach(x -> arr4.add(x));
-        setup = true;
-
-    }
-
-
+   /*
+    */
     public void bench1(){
-
-        benchNon bfl = new benchNon(arr2);
-        System.out.println("benchForLoop test time = " + bfl.test1());
-
-
+        arr.forEach(x -> arr1.add(x));
+        benchNon bfl = new benchNon(arr1);
+        System.out.println("benchNon test time = " + bfl.test());
+        arr1 = null; // Run out of memory if array isn't readied for garbage collection
     }
 
     public void bench2(){
-
-
-        benchImplicit bIm = new benchImplicit(arr1);
-        System.out.println("benchImplicit test time = " + bIm.test1());
-
-
+        arr.forEach(x -> arr2.add(x));
+        benchImplicit bIm = new benchImplicit(arr2);
+        System.out.println("benchImplicit test time = " + bIm.test());
+        arr2 = null;
     }
 
     public void bench3(){
-
-        benchThreadPool btp = new benchThreadPool(arr4);
+        arr.forEach(x -> arr3.add(x));
+        benchThreadPool btp = new benchThreadPool(arr3);
         System.out.println("benchThreadPool test time = " +btp.test());
-
+        arr3 = null;
     }
 
     public void bench4(){
-
-
-        benchExplicit bex = new benchExplicit(arr3);
+        arr.forEach(x -> arr4.add(x));
+        benchExplicit bex = new benchExplicit(arr4);
         bex.run();
+        while(!bex.complete) {//Make sure both threads have exected before getting result.
+        }
         System.out.println("benchExplicit test time = " + bex.result);
-
+        arr4 = null;
     }
 
 
     public void runBench(){
 
         bench1();
-        bench4();
         bench2();
         bench3();
-
-
-
-    }
-    public void run(){
-
-
-       setupBench();
-        //Just to ensure all array copies are created before running test
-        while(setup){
-            runBench();
-            setup = false;        }
+        bench4();
 
     }
+
 
     public static void main(String[] args){
-
         benchMark b = new benchMark();
-        b.run();
-
+        b.runBench();
     }
 }
