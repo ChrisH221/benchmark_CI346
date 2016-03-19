@@ -23,7 +23,9 @@ public class benchImplicit implements prime {
 
         long start = System.nanoTime();
 
-        long count = arr.parallelStream().filter(x -> (isPrime(x))).count();
+        long count = arr.parallelStream()
+                                         .filter(x -> (isPrime(x)))
+                                         .count();
 
         System.out.println("Total number of prime numbers found="+count);
         long finish = System.nanoTime();

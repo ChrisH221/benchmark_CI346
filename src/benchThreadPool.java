@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * Created by chris on 27/02/16.
+ * Created by Chris on 27/02/16.
  *
  * The thread pool class features an inner class which represents the worker
  * thread process for this class. The main thread pool class calculates the

@@ -21,7 +21,7 @@ public class benchMark {
     public benchMark(){
 
         Random randomGenerator = new Random();
-        for (int randNum = 1; randNum <=100000000; ++randNum){
+        for (int randNum = 1; randNum <=100000; ++randNum){
             int randomInt = randomGenerator.nextInt(100);
             arr.add(randomInt);
            
