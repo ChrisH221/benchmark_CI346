@@ -2,7 +2,7 @@
 Benchmark program for CI346
 
 This application is built in Java and aims at benchmarking the various approaches
-to concurrency avaiable in Java to a developer. 
+to concurrency available in Java to a developer. 
 
 The benchmark is a simple test that generates four arrays and populates them with
 randomly generated numbers. The four benchmarks then count the number of prime
